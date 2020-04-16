@@ -1,1 +1,43 @@
+#include <iostream>
+#include <pthread.h>//线程头文件 
+using namespace std;
+int x1=1;//1表示可以访问 
+int x2=1;
 
+// 线程的运行函数
+void* fun1(void* args)
+{
+	bool res=true;//记录线程是否访问成功 
+    cout << "线程1创建成功" << endl;
+    if(x1==1)
+	{	
+		x1=0;//访问x1，给x1加锁
+		cout << "线程1访问变量x1，给x1加锁" << endl;
+	}
+	else
+	{
+		res=false;
+		cout<<"线程1访问变量x1失败，x1被其他线程加锁"<<endl;
+	}
+	if(x2==1)
+	{	
+		x2=0;//访问x2，给x2加锁 
+		cout << "线程1访问变量x2，给x2加锁" << endl;
+	}
+	else
+	{
+		res=false;
+		cout<<"线程1访问变量x2失败，x2被其他线程加锁"<<endl;
+	}
+	if(res)
+	{
+		x1=1;
+		x2=1;//给x1 x2解锁 
+		cout << "线程1访问结束 x1，x2解锁" << endl;
+	}
+	else
+	{
+		cout<<"线程1被阻塞访问无法完成"<<endl;
+	}
+	return 0;
+}
